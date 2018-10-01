@@ -1,5 +1,9 @@
 const gulp = require('gulp'),
-watch = require('gulp-watch');
+watch = require('gulp-watch'),
+postcss = require('gulp-postcss'),
+autoprefixer = require('autoprefixer'),
+cssvars = require('postcss-simple-vars'),
+nested = require('postcss-nested');
 
 // Default task
 gulp.task('default', function() {
@@ -13,10 +17,12 @@ gulp.task('html', function() {
 
 // CSS tasks
 gulp.task('styles', function() {
-   return gulp.src('./styles/styles.css').pipe(gulp.dest('.temp/styles'));
+   return gulp.src('./styles/styles.css')
+    .pipe(postcss([cssvars, nested, autoprefixer]))
+    .pipe(gulp.dest('temp/styles'));
 });
 
-// Task watching the changes in various files
+// Task watching changes in various files
 gulp.task('watch', function() {
     watch('./index.html', function() {
         gulp.start('html');
